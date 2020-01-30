@@ -2,6 +2,7 @@
 ## Version history:
 2019:
    Original script by Jodie Ashford [ashfojsm], Aston University
+   (ashfojsm@aston.ac.uk)
 """
 
 import sys
@@ -27,10 +28,10 @@ def main(clf_path, training_file_path):
     clf = joblib.load(clf_path)
 
     # Begins LSL stream from a Muse with a given address with data sources determined by arguments
-    MyStream.stream("00:55:da:b3:9a:2c")
+    # MyStream.stream("00:55:da:b3:9a:2c")
 
     # Finds existing LSL stream & stars acquiring data
-    inlet = MyRecord.start_stream()
+    # inlet = MyRecord.start_stream()
 
     while True:
         """
@@ -38,8 +39,8 @@ def main(clf_path, training_file_path):
         cols_to_ignore: -1 to remove last column from csv (remove Right AUX column)
         """
         # Feature extraction
-        results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, inlet), 150, 1, cols_to_ignore=-1)
-        # results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, MockStreamInlet()), 150, 1, cols_to_ignore=-1)
+        # results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, inlet), 150, 1, cols_to_ignore=-1)
+        results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, MockStreamInlet()), 150, 1, cols_to_ignore=-1)
         data = pd.DataFrame(data=results, columns=names)
 
         # Feature selection
@@ -71,10 +72,10 @@ def main(clf_path, training_file_path):
 
 
 # TODO enter file path of the training matrix
-training_file_path = r""
+training_file_path = r"/home/CAMPUS/ashfojsm/PycharmProjects/Real-Time-EEG-Classification-with-Muse/CSV files/ParticipantOne_Training_Matrix.csv"
 
 # TODO enter file path of the classifier
-clf_path = r""
+clf_path = r"/home/CAMPUS/ashfojsm/PycharmProjects/Real-Time-EEG-Classification-with-Muse/Models/ParticipantOne_RF_Model.pkl"
 
 if __name__ == "__main__":
     main(clf_path, training_file_path)
