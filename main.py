@@ -21,6 +21,12 @@ Note: for streaming to work the BlueMuse application must already be open and th
 
 
 def main(clf_path, training_file_path):
+    """
+    :param clf_path: String
+        File path of the classifer to use
+    :param training_file_path: String
+        File path of the training matrix to use
+    """
     # Feature selection
     selected_features = fs.feature_selection(training_file_path)
 
@@ -28,19 +34,20 @@ def main(clf_path, training_file_path):
     clf = joblib.load(clf_path)
 
     # Begins LSL stream from a Muse with a given address with data sources determined by arguments
-    # MyStream.stream("00:55:da:b3:9a:2c")
+    MyStream.stream("00:55:da:b3:9a:2c")
 
     # Finds existing LSL stream & stars acquiring data
-    # inlet = MyRecord.start_stream()
+    inlet = MyRecord.start_stream()
 
     while True:
         """
         Generates a 2D array containing features as columns and time windows as rows and a list containing all feature names
-        cols_to_ignore: -1 to remove last column from csv (remove Right AUX column)
+        cols_to_ignore: -1 to remove last column from csv (remove Right AUX column) 
         """
         # Feature extraction
-        # results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, inlet), 150, 1, cols_to_ignore=-1)
-        results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, MockStreamInlet()), 150, 1, cols_to_ignore=-1)
+        results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, inlet), 150, 1, cols_to_ignore=-1)
+        # Code commented below used for testing as it runs the script without needing the Muse headset
+        # results, names = generate_feature_vectors_from_samples(MyRecord.record_numpy(2, MockStreamInlet()), 150, 1, cols_to_ignore=-1)
         data = pd.DataFrame(data=results, columns=names)
 
         # Feature selection
@@ -72,10 +79,10 @@ def main(clf_path, training_file_path):
 
 
 # TODO enter file path of the training matrix
-training_file_path = r"/home/CAMPUS/ashfojsm/PycharmProjects/Real-Time-EEG-Classification-with-Muse/CSV files/ParticipantOne_Training_Matrix.csv"
+training_file_path = r""
 
 # TODO enter file path of the classifier
-clf_path = r"/home/CAMPUS/ashfojsm/PycharmProjects/Real-Time-EEG-Classification-with-Muse/Models/ParticipantOne_RF_Model.pkl"
+clf_path = r""
 
 if __name__ == "__main__":
     main(clf_path, training_file_path)
